@@ -1,0 +1,49 @@
+https://imgur.com/4IUqlam
+
+# Scale Up Web Infrastructure
+
+## Design Diagram
+
+![Scale Up Web Infrastructure](path/to/your/diagram_image.png)
+
+## Components and Explanation
+
+1. **Additional Server**
+   - **Reason for adding**: Increases capacity and provides redundancy.
+
+2. **Load Balancer (HAproxy) Cluster**
+   - **Reason for adding**: Ensures high availability and reliability.
+   - **Explanation**: Configured as a cluster to work together, distributing traffic to the web servers.
+
+3. **Split Components**
+   - **Web Server (Nginx)**
+     - **Reason for splitting**: Improves performance and manageability.
+   - **Application Server**
+     - **Reason for splitting**: Handles business logic separately.
+   - **Database Server (MySQL)**
+     - **Reason for splitting**: Improves data management and performance.
+
+## Specifics of the Infrastructure
+
+1. **Additional Server and Split Components**
+   - **Web Server**: Handles HTTP requests and serves static content.
+   - **Application Server**: Processes dynamic content and business logic.
+   - **Database Server**: Manages data storage and retrieval.
+
+2. **Load Balancer Configuration**
+   - **Cluster Setup**: Ensures redundancy and fault tolerance.
+   - **Distribution Algorithm**: Round Robin or Least Connections.
+
+## Issues with the Infrastructure
+
+1. **Single Points of Failure (SPOF)**
+   - **Issue**: Ensure all components have redundancy.
+   - **Solution**: Implement failover strategies.
+
+2. **Security Issues**
+   - **Issue**: Ensure firewalls, SSL certificates, and other security measures are in place.
+   - **Solution**: Enforce security best practices.
+
+3. **No Monitoring**
+   - **Issue**: Lack of monitoring can lead to undetected issues.
+   - **Solution**: Implement monitoring clients and alerting mechanisms.
