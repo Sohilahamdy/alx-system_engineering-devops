@@ -1,0 +1,43 @@
+https://imgur.com/hAD715y
+
+# Secured and Monitored Web Infrastructure
+
+## Design Diagram
+
+![Secured and Monitored Web Infrastructure](path/to/your/diagram_image.png)
+
+## Components and Explanation
+
+1. **Load Balancer (HAproxy)**
+   - **Reason for adding**: Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed.
+   - **Distribution Algorithm**: Can be configured with Round Robin or Least Connections.
+   - **Active-Active vs. Active-Passive**:
+     - **Active-Active**: Both servers actively handle traffic.
+     - **Active-Passive**: One server is active, and the other is on standby.
+
+2. **Firewalls**
+   - **Reason for adding**: Provides security by controlling network traffic.
+   - **Explanation**: Protects web, application, and database servers from unauthorized access.
+
+3. **SSL Certificate**
+   - **Reason for adding**: Ensures secure, encrypted traffic.
+   - **Explanation**: Enables HTTPS for secure communication between users and servers.
+
+4. **Monitoring Clients (Sumologic or other)**
+   - **Reason for adding**: Collects and analyzes performance data.
+   - **Explanation**: Sends data to a monitoring service to track server performance.
+   - **Monitoring Web Server QPS**: Configured to track and alert on queries per second.
+
+## Issues with the Infrastructure
+
+1. **Terminating SSL at the Load Balancer Level**
+   - **Issue**: Traffic between the load balancer and backend servers is not encrypted.
+   - **Solution**: Use end-to-end encryption.
+
+2. **Single MySQL Server for Writes**
+   - **Issue**: Creates a single point of failure and performance bottleneck.
+   - **Solution**: Implement a Primary-Replica setup for MySQL.
+
+3. **Homogeneous Servers**
+   - **Issue**: Resource contention and complicated scaling.
+   - **Solution**: Separate roles for web, application, and database servers.

@@ -1,0 +1,40 @@
+https://imgur.com/a/Pf3eOLa
+
+
+#### Infrastructure Components:
+
+- **Server:**
+  - A computer that provides services to users over the network. It can be a physical or virtual server.
+  
+- **Domain Name:**
+  - A name assigned to a website that users can use to access the site instead of using an IP address.
+  
+- **DNS Record Type www:**
+  - A type of DNS record that points the subdomain www to the server's IP address.
+
+- **Role of the Web Server (Nginx):**
+  - Receives HTTP/HTTPS requests from users and serves them the requested pages.
+
+- **Role of the Application Server:**
+  - Runs the code and applications required to generate dynamic content for the website.
+
+- **Role of Application Files:**
+  - Contains the code and files necessary to run the application.
+
+- **Role of the Database (MySQL):**
+  - Stores the data and information needed to run the website and provides it upon request.
+
+- **Communication between the Server and the User's Computer:**
+  - Communication occurs via HTTP/HTTPS protocols, where the user sends requests and receives responses from the server.
+
+### Infrastructure Issues
+
+- **Single Point of Failure (SPOF):**
+  - If the server fails, the entire website will go down because there is no other server to provide the service.
+
+- **Downtime during Maintenance:**
+  - When server maintenance or code updates are needed, the website will be unavailable during the maintenance period.
+
+- **Scalability Issues:**
+  - If the number of visitors increases significantly, the server may not handle the load, leading to slow responses or even website downtime.
+

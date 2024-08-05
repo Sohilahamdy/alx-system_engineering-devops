@@ -1,0 +1,42 @@
+https://imgur.com/a/xfFhE2s
+
+# Distributed Web Infrastructure
+
+## Design Diagram
+
+![Distributed Web Infrastructure](path/to/your/diagram_image.png)
+
+## Components and Explanation
+
+1. **Load Balancer (HAproxy)**
+   - **Reason for adding**: Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed, enhancing performance and reliability.
+   - **Distribution Algorithm**: Can be configured with different algorithms, such as Round Robin or Least Connections.
+   - **Active-Active vs. Active-Passive**:
+     - **Active-Active**: Both servers actively handle traffic.
+     - **Active-Passive**: One server is active, and the other is on standby.
+
+2. **Web Server (Nginx)**
+   - **Reason for adding**: Serves static content and forwards dynamic content requests to the application server.
+   - **Explanation**: Efficient in handling multiple concurrent connections.
+
+3. **Application Server**
+   - **Reason for adding**: Runs the application code and handles the business logic of the website.
+   - **Explanation**: Processes dynamic requests and interacts with the database.
+
+4. **Database (MySQL)**
+   - **Reason for adding**: Stores and manages all the data for the website.
+   - **Primary-Replica Cluster**:
+     - **Primary Node**: Handles all write operations.
+     - **Replica Node**: Copies data from the primary node and handles read-only operations.
+   - **Difference for the Application**: Writes to the primary node, reads from both primary and replica nodes.
+
+## Issues with the Infrastructure
+
+1. **Single Points of Failure (SPOF)**
+   - Load balancer and database can be SPOF.
+
+2. **Security Issues**
+   - No firewall, no HTTPS.
+
+3. **No Monitoring**
+   - Lack of real-time monitoring tools.
