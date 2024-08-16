@@ -1,50 +1,72 @@
 #!/usr/bin/python3
-""" Module for a function that queries the Reddit API recursively."""
-
+"""
+Contains the count_words function
+"""
 
 import requests
+import re
+from collections import defaultdict
 
+def count_words(subreddit, word_list):
+    """Counts occurrences of words in titles of hot articles in a subreddit"""
+    
+    def get_hot_posts(subreddit, after=None):
+        """Fetch hot posts recursively"""
+        url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+        headers = {'User-Agent': '0x16-api_advanced:project:v1.0.0 (by /u/your_username)'}
+        params = {'after': after} if after else {}
+        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+        
+        if response.status_code == 200:
+            try:
+                data = response.json().get('data', {})
+                posts = data.get('children', [])
+                after = data.get('after', None)
+                return posts, after
+            except ValueError:
+                return [], None
+        else:
+            return [], None
+    
+    def count_words_recursive(subreddit, word_list, hot_list=[], after=None):
+        """Recursive function to get all posts and count keywords"""
+        posts, new_after = get_hot_posts(subreddit, after)
+        
+        if posts:
+            for post in posts:
+                title = post.get('data', {}).get('title', '').lower()
+                hot_list.extend(title)
+            
+            if new_after:
+                return count_words_recursive(subreddit, word_list, hot_list, new_after)
+            else:
+                return hot_list
+        else:
+            return hot_list
 
-def count_words(subreddit, word_list, after='', word_dict={}):
-    """ A function that queries the Reddit API parses the title of
-    all hot articles, and prints a sorted count of given keywords
-    (case-insensitive, delimited by spaces.
-    Javascript should count as javascript, but java should not).
-    If no posts match or the subreddit is invalid, it prints nothing.
-    """
+    # Validate subreddit and word_list
+    if not isinstance(subreddit, str) or not isinstance(word_list, list):
+        return
+    
+    if not word_list:
+        return
+    
+    word_list = [word.lower() for word in word_list]
+    hot_list = count_words_recursive(subreddit, word_list)
+    
+    # Create a dictionary to store word counts
+    word_count = defaultdict(int)
+    
+    # Define a regex pattern for matching words only
+    word_pattern = re.compile(r'\b\w+\b')
 
-    if not word_dict:
+    for title in hot_list:
         for word in word_list:
-            if word.lower() not in word_dict:
-                word_dict[word.lower()] = 0
-
-    if after is None:
-        wordict = sorted(word_dict.items(), key=lambda x: (-x[1], x[0]))
-        for word in wordict:
-            if word[1]:
-                print('{}: {}'.format(word[0], word[1]))
-        return None
-
-    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
-    header = {'user-agent': 'redquery'}
-    parameters = {'limit': 100, 'after': after}
-    response = requests.get(url, headers=header, params=parameters,
-                            allow_redirects=False)
-
-    if response.status_code != 200:
-        return None
-
-    try:
-        hot = response.json()['data']['children']
-        aft = response.json()['data']['after']
-        for post in hot:
-            title = post['data']['title']
-            lower = [word.lower() for word in title.split(' ')]
-
-            for word in word_dict.keys():
-                word_dict[word] += lower.count(word)
-
-    except Exception:
-        return None
-
-    count_words(subreddit, word_list, aft, word_dict)
+            word_count[word] += len(word_pattern.findall(title))
+    
+    # Sort words first by count (descending) then alphabetically
+    sorted_words = sorted(word_count.items(), key=lambda x: (-x[1], x[0]))
+    
+    for word, count in sorted_words:
+        if count > 0:
+            print(f"{word}: {count}")

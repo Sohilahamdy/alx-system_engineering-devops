@@ -1,31 +1,38 @@
 #!/usr/bin/python3
-"""Contains recurse function"""
+"""
+Contains the recurse function
+"""
+
 import requests
 
-
-def recurse(subreddit, hot_list=[], after="", count=0):
-    """Returns a list of titles of all hot posts on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-        "User-Agent": "0x16-api_advanced:project:\
-v1.0.0 (by /u/firdaus_cartoon_jr)"
-    }
-    params = {
-        "after": after,
-        "count": count,
-        "limit": 100
-    }
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
-    if response.status_code == 404:
+def recurse(subreddit, hot_list=[]):
+    """Returns a list of all hot articles for a given subreddit"""
+    if not isinstance(subreddit, str) or not subreddit:
         return None
-
-    results = response.json().get("data")
-    after = results.get("after")
-    count += results.get("dist")
-    for c in results.get("children"):
-        hot_list.append(c.get("data").get("title"))
-
-    if after is not None:
-        return recurse(subreddit, hot_list, after, count)
-    return hot_list
+    
+    url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+    headers = {'User-Agent': '0x16-api_advanced:project:v1.0.0 (by /u/your_username)'}
+    
+    response = requests.get(url, headers=headers, allow_redirects=False)
+    
+    if response.status_code == 200:
+        try:
+            data = response.json().get('data', {})
+            posts = data.get('children', [])
+            if posts:
+                for post in posts:
+                    hot_list.append(post.get('data', {}).get('title', ''))
+                
+                # Get the next page
+                after = data.get('after', None)
+                if after:
+                    next_url = f'https://www.reddit.com/r/{subreddit}/hot.json?after={after}'
+                    return recurse(subreddit, hot_list)  # Recursive call with updated hot_list
+                else:
+                    return hot_list
+            else:
+                return None
+        except ValueError:
+            return None
+    else:
+        return None
