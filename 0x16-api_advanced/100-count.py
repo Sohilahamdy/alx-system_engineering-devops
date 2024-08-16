@@ -21,8 +21,9 @@ def count_words(subreddit, word_list):
         }
         params = {'after': after} if after else {}
         response = requests.get(
-                url,
-                headers=headers, params=params, allow_redirects=False)
+            url,
+            headers=headers, params=params, allow_redirects=False
+        )
 
         if response.status_code == 200:
             try:
@@ -35,21 +36,25 @@ def count_words(subreddit, word_list):
         else:
             return [], None
 
-    def count_words_recursive(subreddit, word_list, hot_list=[], after=None):
+    def count_words_recursive(subreddit, word_list, hot_list=None, after=None):
         """Recursive function to get all posts and count keywords"""
+        if hot_list is None:
+            hot_list = []
+
         posts, new_after = get_hot_posts(subreddit, after)
 
         if posts:
             for post in posts:
                 title = post.get('data', {}).get('title', '').lower()
-                hot_list.extend(title)
+                hot_list.extend(title.split())
 
             if new_after:
                 return count_words_recursive(
-                        subreddit,
-                        word_list,
-                        hot_list,
-                        new_after)
+                    subreddit,
+                    word_list,
+                    hot_list,
+                    new_after
+                )
             else:
                 return hot_list
         else:
