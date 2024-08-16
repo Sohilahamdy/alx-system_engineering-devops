@@ -15,7 +15,9 @@ def count_words(subreddit, word_list):
         """Fetch hot posts recursively"""
         url = f"https://www.reddit.com/r/{subreddit}/hot.json"
         headers = {
-            "User-Agent": "0x16-api_advanced:project:v1.0.0 (by /u/your_username)"
+            "User-Agent": (
+                "0x16-api_advanced:project:v1.0.0 (by /u/your_username)"
+            )
         }
         params = {"after": after} if after else {}
         response = requests.get(
