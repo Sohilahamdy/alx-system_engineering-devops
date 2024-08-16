@@ -3,8 +3,8 @@
 Contains the count_words function
 """
 
-import requests
 import re
+import requests
 from collections import defaultdict
 
 
