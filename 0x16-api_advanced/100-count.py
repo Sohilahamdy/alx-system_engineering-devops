@@ -4,8 +4,8 @@ Contains the count_words function
 """
 
 import re
-import requests
 from collections import defaultdict
+import requests
 
 
 def count_words(subreddit, word_list):
@@ -13,28 +13,28 @@ def count_words(subreddit, word_list):
 
     def get_hot_posts(subreddit, after=None):
         """Fetch hot posts recursively"""
-        url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+        url = f"https://www.reddit.com/r/{subreddit}/hot.json"
         headers = {
-            'User-Agent': (
-                '0x16-api_advanced:project:v1.0.0 (by /u/your_username)'
-            )
+            "User-Agent": "0x16-api_advanced:project:v1.0.0 (by /u/your_username)"
         }
-        params = {'after': after} if after else {}
+        params = {"after": after} if after else {}
         response = requests.get(
             url,
-            headers=headers, params=params, allow_redirects=False
+            headers=headers,
+            params=params,
+            allow_redirects=False,
+            timeout=10
         )
 
         if response.status_code == 200:
             try:
-                data = response.json().get('data', {})
-                posts = data.get('children', [])
-                after = data.get('after', None)
+                data = response.json().get("data", {})
+                posts = data.get("children", [])
+                after = data.get("after", None)
                 return posts, after
             except ValueError:
                 return [], None
-        else:
-            return [], None
+        return [], None
 
     def count_words_recursive(subreddit, word_list, hot_list=None, after=None):
         """Recursive function to get all posts and count keywords"""
@@ -45,20 +45,17 @@ def count_words(subreddit, word_list):
 
         if posts:
             for post in posts:
-                title = post.get('data', {}).get('title', '').lower()
+                title = post.get("data", {}).get("title", "").lower()
                 hot_list.extend(title.split())
 
             if new_after:
                 return count_words_recursive(
-                    subreddit,
-                    word_list,
-                    hot_list,
-                    new_after
+                        subreddit,
+                        word_list,
+                        hot_list,
+                        new_after
                 )
-            else:
-                return hot_list
-        else:
-            return hot_list
+        return hot_list
 
     # Validate subreddit and word_list
     if not isinstance(subreddit, str) or not isinstance(word_list, list):
@@ -72,14 +69,17 @@ def count_words(subreddit, word_list):
 
     # Create a dictionary to store word counts
     word_count = defaultdict(int)
-    word_pattern = re.compile(r'\b\w+\b')
+    word_pattern = re.compile(r"\b\w+\b")
 
     for title in hot_list:
         for word in word_list:
             word_count[word] += len(word_pattern.findall(title))
 
     # Sort words first by count (descending) then alphabetically
-    sorted_words = sorted(word_count.items(), key=lambda x: (-x[1], x[0]))
+    sorted_words = sorted(
+            word_count.items(),
+            key=lambda x: (-x[1], x[0])
+    )
 
     for word, count in sorted_words:
         if count > 0:
