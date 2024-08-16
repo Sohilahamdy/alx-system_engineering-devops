@@ -15,11 +15,13 @@ def count_words(subreddit, word_list):
         """Fetch hot posts recursively"""
         url = f'https://www.reddit.com/r/{subreddit}/hot.json'
         headers = {
-            'User-Agent': '0x16-api_advanced:project:v1.0.0 (by /u/your_username)'
+            'User-Agent': '0x16-api_advanced:project:v1.0.0
+            (by /u/your_username)'
         }
         params = {'after': after} if after else {}
-        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
-        
+        response = requests.get(url, headers=headers,
+                params=params, allow_redirects=False)
+
         if response.status_code == 200:
             try:
                 data = response.json().get('data', {})
@@ -34,14 +36,15 @@ def count_words(subreddit, word_list):
     def count_words_recursive(subreddit, word_list, hot_list=[], after=None):
         """Recursive function to get all posts and count keywords"""
         posts, new_after = get_hot_posts(subreddit, after)
-        
+
         if posts:
             for post in posts:
                 title = post.get('data', {}).get('title', '').lower()
                 hot_list.extend(title)
-            
+
             if new_after:
-                return count_words_recursive(subreddit, word_list, hot_list, new_after)
+                return count_words_recursive(subreddit, word_list,
+                        hot_list, new_after)
             else:
                 return hot_list
         else:
