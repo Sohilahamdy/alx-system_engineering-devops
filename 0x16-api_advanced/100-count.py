@@ -18,8 +18,9 @@ def count_words(subreddit, word_list):
             'User-Agent': '0x16-api_advanced:project:v1.0.0 (by /u/your_username)'
         }
         params = {'after': after} if after else {}
-        response = requests.get(url, headers=headers,
-                params=params, allow_redirects=False)
+        response = requests.get(
+                url,
+                headers=headers, params=params, allow_redirects=False)
 
         if response.status_code == 200:
             try:
@@ -42,8 +43,11 @@ def count_words(subreddit, word_list):
                 hot_list.extend(title)
 
             if new_after:
-                return count_words_recursive(subreddit, word_list,
-                        hot_list, new_after)
+                return count_words_recursive(
+                        subreddit,
+                        word_list,
+                        hot_list,
+                        new_after)
             else:
                 return hot_list
         else:
