@@ -2,6 +2,10 @@
 
 ## Apache 500 Internal Server Error
 
+<p align="center">
+<img src="https://i0.wp.com/faildesk.net/wp-content/uploads/2019/01/prolific_pen_down_server.jpg?resize=696%2C723&ssl=1" width=100% height=100% />
+</p>
+
 ### Incident report for [500 Internal Server Error / Site Outage](https://github.com/Sohilahamdy/alx-system_engineering-devops/tree/master/0x17-web_stack_debugging_3)
 
 #### Summary
