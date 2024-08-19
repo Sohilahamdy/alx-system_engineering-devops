@@ -6,7 +6,7 @@ In this project, you'll be debugging a Wordpress website running on a LAMP stack
 
 ## Background Context
 
-Debugging can sometimes require more than just logs, especially if the software fails in unexpected ways or the logs don’t provide sufficient information. This project involves diagnosing issues in a Wordpress site, which is commonly powered by a LAMP stack (Linux, Apache, MySQL, and PHP).
+Debugging can sometimes require more than just logs, especially if the software fails in unexpected ways or the logs don't provide sufficient information. This project involves diagnosing issues in a Wordpress site, which is commonly powered by a LAMP stack (Linux, Apache, MySQL, and PHP).
 
 ## Requirements
 
@@ -71,5 +71,3 @@ Use \`strace\` to find out why Apache is returning a 500 error. Once identified,
 - **Directory**: \`0x17-web_stack_debugging_3\`
 - **File**: \`0-strace_is_your_friend.pp\`
 EOF
-
-
