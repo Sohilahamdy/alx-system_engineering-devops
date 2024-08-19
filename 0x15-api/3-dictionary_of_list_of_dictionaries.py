@@ -1,18 +1,49 @@
 #!/usr/bin/python3
-"""Exports to-do list information of all employees to JSON format."""
 import json
 import requests
 
-if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    users = requests.get(url + "users").json()
+def fetch_data():
+    # Replace with actual URLs for the users and todos endpoints
+    users_url = "https://jsonplaceholder.typicode.com/users"
+    todos_url = "https://jsonplaceholder.typicode.com/todos"
+    
+    users_response = requests.get(users_url)
+    todos_response = requests.get(todos_url)
+    
+    if users_response.status_code != 200 or todos_response.status_code != 200:
+        print("Error fetching data")
+        return None, None
+    
+    users = users_response.json()
+    todos = todos_response.json()
+    
+    return users, todos
 
-    with open("todo_all_employees.json", "w") as jsonfile:
-        json.dump({
-            u.get("id"): [{
-                "task": t.get("title"),
-                "completed": t.get("completed"),
-                "username": u.get("username")
-            } for t in requests.get(url + "todos",
-                                    params={"userId": u.get("id")}).json()]
-            for u in users}, jsonfile)
+def export_data_to_json(users, todos):
+    # Create a dictionary to hold the data in the required format
+    data = {}
+    
+    # Populate the dictionary with user IDs and their tasks
+    for user in users:
+        user_id = str(user['id'])
+        username = user['username']
+        data[user_id] = [
+            {
+                "username": username,
+                "task": todo['title'],
+                "completed": todo['completed']
+            }
+            for todo in todos if todo['userId'] == user['id']
+        ]
+    
+    # Write the dictionary to a JSON file
+    with open('todo_all_employees.json', 'w') as f:
+        json.dump(data, f, indent=4)
+
+def main():
+    users, todos = fetch_data()
+    if users and todos:
+        export_data_to_json(users, todos)
+
+if __name__ == "__main__":
+    main()
