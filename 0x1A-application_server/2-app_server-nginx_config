@@ -1,6 +1,10 @@
 server {
     listen 80;
+<<<<<<< HEAD
     server_name 127.0.0.1 35.231.193.217 54.210.46.253;
+=======
+    server_name 54.210.46.253;
+>>>>>>> e6f3972aeb378e33d3482c8fdf9c6328757e0b22
 
     location /airbnb-onepage/ {
         include proxy_params;
@@ -17,9 +21,12 @@ server {
         include proxy_params;
 	proxy_pass http://localhost:5002/api/;
     }
+<<<<<<< HEAD
 
     location / {
         include proxy_params;
 	proxy_pass http://localhost:5003/;
     }
+=======
+>>>>>>> e6f3972aeb378e33d3482c8fdf9c6328757e0b22
 }
