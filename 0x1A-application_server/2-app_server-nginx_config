@@ -1,32 +1,13 @@
 server {
     listen 80;
-<<<<<<< HEAD
-    server_name 127.0.0.1 35.231.193.217 54.210.46.253;
-=======
     server_name 54.210.46.253;
->>>>>>> e6f3972aeb378e33d3482c8fdf9c6328757e0b22
 
     location /airbnb-onepage/ {
-        include proxy_params;
-	proxy_pass http://localhost:5000/airbnb-onepage/;
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
-
-    location /airbnb-dynamic/number_odd_or_even/ {
-        rewrite /airbnb-dynamic/(.*) $1 break;
-        include proxy_params;
-	proxy_pass http://localhost:5001/;
-    }
-
-    location /api/ {
-        include proxy_params;
-	proxy_pass http://localhost:5002/api/;
-    }
-<<<<<<< HEAD
-
-    location / {
-        include proxy_params;
-	proxy_pass http://localhost:5003/;
-    }
-=======
->>>>>>> e6f3972aeb378e33d3482c8fdf9c6328757e0b22
 }
+
